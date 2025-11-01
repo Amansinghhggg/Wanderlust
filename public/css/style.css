@@ -669,4 +669,74 @@ form input:valid {
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(34, 34, 34, 0.2);
     }
-  
+/* ===== SIGNUP FORM STYLING ===== */
+  .signup-card {
+    background: #fff;
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.signup-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.signup-title {
+    color: #222;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.signup-card .form-label {
+    font-weight: 600;
+    color: #484848;
+    margin-bottom: 8px;
+}
+
+.signup-card .form-control {
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    padding: 12px 16px;
+    transition: all 0.3s;
+}
+
+.signup-card .form-control:focus {
+    border-color: #FF5A5F;
+    box-shadow: 0 0 0 3px rgba(255,90,95,0.1);
+}
+
+.signup-btn {
+    background: #FF5A5F !important;
+    border: none !important;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.signup-btn:hover {
+    background: #e00007 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,90,95,0.3);
+}
+
+.signup-card small {
+    font-size: 0.85rem;
+}
+
+.signup-card input::placeholder {
+    color: #aaa;
+}
+
+@media (max-width: 768px) {
+    .signup-card {
+        padding: 30px 20px;
+    }
+    
+    .signup-title {
+        font-size: 1.5rem;
+    }
+}

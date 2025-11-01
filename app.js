@@ -6,8 +6,11 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
-
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./MODELS/user');
 const session = require('express-session');
+
 const sessionOptions={
   secret:"mysupersecretcode",
   resave:false,
@@ -25,15 +28,20 @@ app.get('/', (req, res) => {
 // Session and Flash Middleware
 app.use(session(sessionOptions));
 app.use(flash());
-
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
 });
 //review and listing routes
-const review = require("./routes/review.js")
-const listing = require('./routes/listing.js')
+const reviewroute = require("./routes/reviewroute.js")
+const listingroute = require('./routes/listingroute.js')
+const userroute= require('./routes/userroute.js');
 // View engine + ejs-mate
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -48,8 +56,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
   .then(()=> console.log('Mongo Connected'))
   .catch(err => console.error(err));
 
-app.use("/listings",listing) ;
-app.use("/listings/:id/reviews",review)
+app.use("/listings",listingroute) ;
+app.use("/listings/:id/reviews",reviewroute)
+app.use("/", userroute);
 
 
 // Favicon route (prevents 404 errors)
