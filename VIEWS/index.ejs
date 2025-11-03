@@ -10,7 +10,31 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><%= listing.title %></h5>
                         <p class="card-text">Address: <%= listing.location %>, <%= listing.country %></p>
-                        <p class="card-text">Price: ₹<%= listing.price.toLocaleString("en-IN") %></p>
+                        <p class="card-text">Price: ₹<%= listing.price.toLocaleString("en-IN") %>/Night</p>
+                        
+                        <!-- Average Rating Display -->
+                        <% if (listing.reviews.length > 0) { %>
+                            <div class="rating-display mb-2">
+                                <span class="text-warning">
+                                    <% for(let i = 0; i < Math.floor(listing.averageRating); i++) { %>
+                                        <i class="fa-solid fa-star"></i>
+                                    <% } %>
+                                    <% if (listing.averageRating % 1 >= 0.5) { %>
+                                        <i class="fa-solid fa-star-half-stroke"></i>
+                                    <% } %>
+                                    <% for(let i = Math.ceil(listing.averageRating); i < 5; i++) { %>
+                                        <i class="fa-regular fa-star"></i>
+                                    <% } %>
+                                </span>
+                                <strong class="ms-2"><%= listing.averageRating %></strong>
+                                <span class="text-muted">(<%= listing.reviews.length %>)</span>
+                            </div>
+                        <% } else { %>
+                            <div class="rating-display mb-2">
+                                <span class="text-muted">No reviews yet</span>
+                            </div>
+                        <% } %>
+                        
                         <a href="/listings/<%= listing._id %>" class="btn">View Listing</a>
                     </div>
                 </div>

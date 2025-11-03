@@ -32,7 +32,15 @@ const listingSchema = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Review'
 		}
-	]
+	],
+	averageRating: {
+	  type: Number,
+	  default: 0
+	},
+	owner: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
+	}
 });
 listingSchema.post('findOneAndDelete', async function(listing) {
     if (listing) {

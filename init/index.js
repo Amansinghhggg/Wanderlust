@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Listing = require('../MODELS/models');
-const { data } = require('./data');
+const Listing = require('../MODELS/listing');
+const { data } = require('../init/data');
 
 async function main() {
    mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
@@ -10,12 +10,7 @@ main().then(() => console.log("Mongo Connection Open"))
 
 
 const init = async () => {
-    await Listing.deleteMany({});
-    const listings = data.map(item => ({
-        ...item,
-        image: item.image.url // use only the image URL
-    }));
-    await Listing.insertMany(listings);
-    console.log("Data Inserted");
+   let result = await Listing.updateMany({}, { $set: { owner: "6907aea4273ddd08817a7ba3" } });
+    console.log(result);
 };
 init();

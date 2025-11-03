@@ -25,6 +25,8 @@ const sessionOptions={
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+
 // Session and Flash Middleware
 app.use(session(sessionOptions));
 app.use(flash());
@@ -34,6 +36,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
@@ -60,7 +63,7 @@ app.use("/listings",listingroute) ;
 app.use("/listings/:id/reviews",reviewroute)
 app.use("/", userroute);
 
-
+ 
 // Favicon route (prevents 404 errors)
 app.get('/favicon.ico', (req, res) => {
   res.status(204).end();
@@ -71,10 +74,11 @@ app.use((req, res, next) => {
   console.warn('404 request for:', req.originalUrl);
   next(new ExpressError('Page Not Found', 404));
 });
+
 // Basic error handler
 app.use((err, req, res, next) => {
   // Only log non-404 errors to reduce noise
-  if (err.statusCode !== 404) {
+  if (err.statusCode!==404) {
     console.error(err);
   }
   let { statusCode = 500, message = 'Something went wrong' } = err;

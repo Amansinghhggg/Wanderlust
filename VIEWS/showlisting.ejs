@@ -9,22 +9,47 @@
         <strong>Location:</strong> <%= listing.location %>, <%= listing.country %>
       </p>
       <p class="airbnb-price">
-        <strong>Price:</strong> <%= listing.price.toLocaleString("en-IN") %> Rs
+        <strong>Price:</strong> <%= listing.price.toLocaleString("en-IN") %>Rs/Night
       </p>
+      
+      
+      
       <p class="airbnb-description">
         <strong>Description:</strong> <%= listing.description %>
       </p>
+       <p class="airbnb-description">
+        <strong>Owner:</strong> <%= listing.owner.username %>
+      </p>
       <img class="airbnb-image" src="<%= listing.image %>" alt="<%= listing.title %>">
-
+      <% if (currentUser && listing.owner.equals(currentUser._id)) { %>
       <div class="airbnb-actions" style="gap:0; margin-top:32px;">
         <a href="/listings/<%= listing._id %>/edit" class="btn airbnb-btn-warning"><b>Edit Listing</b></a>
         <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="airbnb-delete-form" style="margin:0; flex:1;">
           <button type="submit" class="btn airbnb-btn-danger"><b>Delete Listing</b></button>
         </form>
       </div>
+      <% } %>
     </div>
     <div class="review-section" style="margin-top:40px;">
-      <h2>Reviews</h2>
+      <h2>Reviews</h2> 
+      <!-- Average Rating Display -->
+            <% if (listing.reviews.length > 0) { %>
+        <div class="rating-display-large mb-3">
+          <span class="text-warning">
+            <% for(let i = 0; i < Math.floor(listing.averageRating); i++) { %>
+              <i class="fa-solid fa-star"></i>
+            <% } %>
+            <% if (listing.averageRating % 1 >= 0.5) { %>
+              <i class="fa-solid fa-star-half-stroke"></i>
+            <% } %>
+            <% for(let i = Math.ceil(listing.averageRating); i < 5; i++) { %>
+              <i class="fa-regular fa-star"></i>
+            <% } %>
+          </span>
+          <strong class="ms-2" style="font-size: 1.2rem;"><%= listing.averageRating %></strong>
+          <span class="text-muted" style="font-size: 1.1rem;">(<%= listing.reviews.length %> <%= listing.reviews.length === 1 ? 'review' : 'reviews' %>)</span>
+        </div>
+      <% } %>
       <% if(listing.reviews.length === 0){ %>
         <p class="text-muted">No Reviews Yet - Be The First Reviewer!</p>
       <% } else { %>
@@ -33,11 +58,14 @@
         <div class="col-md-6 col-lg-4 mb-3">
           <div class="card">
             <div class="card-body">
+              <h4 class="card-title">Posted By: @<%= review.author ? review.author.username : 'Anonymous' %></h4>
               <h5 class="card-title">Rating: <%= review.rating %>/5 ⭐</h5>
               <p class="card-text"><%= review.comment %></p>
               <small class="text-muted"><%= review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'Just now' %></small>
               <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="review-delete-form">
+              <% if (currentUser && review.author.equals(currentUser._id)) { %>
                 <button type="submit" class="btn review-delete-btn">Delete</button>
+              <% } %>
               </form>
             </div>
           </div>
@@ -48,6 +76,7 @@
   </div>
  
     <!-- Review Section -->
+     <% if(currentUser) { %>
     <div class="review-section" style="margin-top:40px;">
       <h2>Write a Review</h2>
 
@@ -56,20 +85,21 @@
         <label for="rating">Your Rating:</label>
         <div class="stars">
           <% for (let i = 5; i >= 1; i--) { %>
-            <input type="radio" name="rating" id="star-<%= i %>" value="<%= i %>">
+            <input type="radio" name="review[rating]" id="star-<%= i %>" value="<%= i %>" required>
             <label for="star-<%= i %>">★</label>
           <% } %>
         </div>
 
         <label for="comment">Your Review:</label>
         <div class="mb-3"> 
-<textarea class="form-control" name="comment" id="comment" rows="4" placeholder="Share your experience..." required></textarea>
+<textarea class="form-control" name="review[comment]" id="comment" rows="4" placeholder="Share your experience..." required></textarea>
  <div class="invalid-feedback">Enter A Valid Description</div>
         </div>
         
         <button type="submit" class="btn airbnb-btn-primary">Submit Review</button>
       </form>
     </div>
+    <% } %>
   </div>
 
 </body>

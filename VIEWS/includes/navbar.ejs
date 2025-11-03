@@ -18,5 +18,27 @@
         </li>
       </ul>
     </div>
+  <% if(!currentUser) { %>
+    <div class="dropdown">
+      <a class="btn btn-secondary dropdown" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+       Sign Up / Login
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" href="/register">Sign Up</a></li>
+        <li><a class="dropdown-item" href="/login">Login</a></li>
+      </ul>
+    </div>
+  <% } %>
+  <% if(currentUser) { %>
+    <div class="dropdown">
+      <a class="btn btn-secondary dropdown" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        Account
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  <% } %>
   </div>
 </nav>
